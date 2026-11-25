@@ -30,6 +30,7 @@ import stirling.software.common.util.GeneralUtils;
 import stirling.software.common.util.TempFileManager;
 import stirling.software.common.util.WebResponseUtils;
 
+@ConditionalOnProperty(name = "stirling.features.digital-signature.enabled", havingValue = "true")
 @SecurityApi
 @RequiredArgsConstructor
 public class RemoveCertSignController {

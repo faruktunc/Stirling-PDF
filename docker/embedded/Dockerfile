@@ -55,10 +55,10 @@ RUN gradle dependencies --no-daemon || true
 
 COPY . .
 
-ARG STIRLING_FLAVOR=proprietary
+ARG STIRLING_FLAVOR=core
 ENV STIRLING_FLAVOR=${STIRLING_FLAVOR}
 # Include the processor (admin portal) in the bundled editor; false leaves it out.
-ARG BUILD_PORTAL=true
+ARG BUILD_PORTAL=false
 
 # Which Stirling account the portal connects to. Build-time because Vite inlines VITE_* into the
 # bundle; there is no runtime override. Empty keeps the committed frontend .env defaults, which are

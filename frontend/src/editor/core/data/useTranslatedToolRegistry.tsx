@@ -1282,11 +1282,62 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
       },
     };
 
+    // Personal PDF Engine profile: expose only the tools selected for this self-hosted setup.
+    // Digital certificate signing stays in source but is intentionally absent from this allowlist.
+    const PERSONAL_TOOL_IDS = new Set([
+      "pdfTextEditor",
+      "multiTool",
+      "merge",
+      "sign",
+      "addText",
+      "addImage",
+      "annotate",
+      "addPassword",
+      "watermark",
+      "addStamp",
+      "sanitize",
+      "flatten",
+      "unlockPDFForms",
+      "formFill",
+      "changePermissions",
+      "getPdfInfo",
+      "read",
+      "changeMetadata",
+      "editTableOfContents",
+      "crop",
+      "rotate",
+      "autoRotate",
+      "split",
+      "reorganizePages",
+      "scalePages",
+      "addPageNumbers",
+      "addAttachments",
+      "extractPages",
+      "extractImages",
+      "removePages",
+      "removeBlanks",
+      "removeAnnotations",
+      "removeImage",
+      "removePassword",
+      "automate",
+      "repair",
+      "overlayPdfs",
+      "compare",
+      "compress",
+      "convert",
+      "ocr",
+      "redact",
+    ]);
+
+    const selectedTools = Object.fromEntries(
+      Object.entries(allTools).filter(([toolId]) => PERSONAL_TOOL_IDS.has(toolId)),
+    ) as ToolRegistry;
+
     const regularTools = {} as RegularToolRegistry;
     const superTools = {} as SuperToolRegistry;
     const linkTools = {} as LinkToolRegistry;
 
-    Object.entries(allTools).forEach(([key, entry]) => {
+    Object.entries(selectedTools).forEach(([key, entry]) => {
       const toolId = key as ToolId;
       if (isSuperToolId(toolId)) {
         superTools[toolId] = entry;
@@ -1298,7 +1349,7 @@ export function useTranslatedToolCatalog(): TranslatedToolCatalog {
     });
 
     return {
-      allTools,
+      allTools: selectedTools,
       regularTools,
       superTools,
       linkTools,

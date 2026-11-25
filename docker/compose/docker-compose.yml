@@ -3,15 +3,21 @@ services:
     build:
       context: ../..
       dockerfile: docker/embedded/Dockerfile
-    container_name: stirling-pdf
+      args:
+        STIRLING_FLAVOR: core
+        BUILD_PORTAL: "false"
+    container_name: personal-pdf-engine
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8080$${SYSTEM_ROOTURIPATH:-''}/api/v1/info/status | grep -q 'UP'"]
       interval: 5s
       timeout: 10s
       retries: 16
+      start_period: 30s
+    # Keep the unauthenticated personal engine reachable only from the host.
+    # Attach the Laravel container to personal-pdf-network for private service-to-service access.
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - ../../stirling/latest/data:/usr/share/tessdata:rw
       - ../../stirling/latest/config:/configs:rw
@@ -19,22 +25,19 @@ services:
     environment:
       DISABLE_ADDITIONAL_FEATURES: "true"
       SECURITY_ENABLELOGIN: "false"
-      SYSTEM_DEFAULTLOCALE: en-US
-      UI_APPNAME: Stirling-PDF
-      UI_HOMEDESCRIPTION: Demo site for Stirling-PDF Latest
-      UI_APPNAMENAVBAR: Stirling-PDF Latest
+      STIRLING_FEATURES_DIGITAL_SIGNATURE_ENABLED: "false"
+      SYSTEM_DEFAULTLOCALE: tr-TR
+      UI_APPNAME: Personal PDF Engine
+      UI_HOMEDESCRIPTION: Self-hosted personal PDF processing engine
+      UI_APPNAMENAVBAR: Personal PDF Engine
       SYSTEM_MAXFILESIZE: "100"
-      METRICS_ENABLED: "true"
-      SYSTEM_GOOGLEVISIBILITY: "true"
-      SHOW_SURVEY: "true"
+      METRICS_ENABLED: "false"
+      SYSTEM_GOOGLEVISIBILITY: "false"
+      SHOW_SURVEY: "false"
     networks:
       - stirling-network
 
 networks:
   stirling-network:
+    name: personal-pdf-network
     driver: bridge
-
-volumes:
-  stirling-data:
-  stirling-config:
-  stirling-logs:
