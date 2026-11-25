@@ -2,6 +2,7 @@ package stirling.software.SPDF.controller.api.security;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ import stirling.software.SPDF.service.HardwareKeyStoreService;
  * the certificates available to sign with. Enumeration endpoints are restricted to the desktop
  * bundle, reached over loopback - see {@link HardwareKeyStoreService#assertLocalDesktop}.
  */
+@ConditionalOnProperty(name = "stirling.features.digital-signature.enabled", havingValue = "true")
 @RestController
 @RequestMapping("/api/v1/security/cert-sign/hardware")
 @RequiredArgsConstructor

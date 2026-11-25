@@ -28,6 +28,7 @@ import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
 import org.bouncycastle.tsp.TimeStampToken;
 import org.bouncycastle.tsp.TimeStampTokenInfo;
 import org.bouncycastle.util.Store;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -53,6 +54,7 @@ import stirling.software.common.service.CustomPDFDocumentFactory;
 import stirling.software.common.util.ExceptionUtils;
 
 @Slf4j
+@ConditionalOnProperty(name = "stirling.features.digital-signature.enabled", havingValue = "true")
 @SecurityApi
 @RequiredArgsConstructor
 public class ValidateSignatureController {

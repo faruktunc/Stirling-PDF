@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,7 @@ import stirling.software.proprietary.workflow.service.WorkflowSessionService;
 import tools.jackson.databind.ObjectMapper;
 
 @Slf4j
+@ConditionalOnProperty(name = "stirling.features.digital-signature.enabled", havingValue = "true")
 @RestController
 @RequestMapping("/api/v1/security")
 @PreAuthorize("@principalPolicy.isHumanUser(authentication)")
